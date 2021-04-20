@@ -1,0 +1,18 @@
+kubectl describe pod etcd-controlplane -n kube-system
+
+ --cert-file=/etc/kubernetes/pki/etcd/server.crt
+ --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+  --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+  --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+  --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+      --key-file=/etc/kubernetes/pki/etcd/server.key
+
+
+  etcdctl --endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /opt/snapshot-pre-boot.db
+
+
+  etcdctl snapshot restore /opt/snapshot-pre-boot.db \
+--endpoints=https://[127.0.0.1]:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key

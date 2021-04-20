@@ -1,0 +1,45 @@
+commands:
+
+alias k=kubectl
+complete -F __start_kubectl k
+
+
+update master node:
+
+    get details of available upgrade version:
+        kubeadm upgrade plan
+
+    upgrade kubeadm & kubelet on master
+        apt-get update && \
+        apt-get install -y --allow-change-held-packages kubeadm=1.19.0-00
+
+    sudo kubeadm upgrade apply v1.19.0
+    apt install kubelet=1.19.0-00
+
+
+
+call kubeadm upgrade
+    sudo kubeadm upgrade node
+update cluster node:
+
+first drain nodes from node1 using controlplane
+ #   kubectl drain <node-to-drain> --ignore-daemonsets
+    kubectl drain node01 --ignore-daemonsets
+
+ssh into node01 & execute:
+
+    update kubeadm version & then kubelet version
+            apt-get update && \
+                apt install kubeadm=1.19.0-00
+
+        call kubeadm upgrade
+            sudo kubeadm upgrade node
+        -   apt install kubelet=1.19.0-00
+
+        Restart the kubelet:
+
+            sudo systemctl daemon-reload
+            sudo systemctl restart kubelet
+
+on master execute:
+kubectl uncordon node01
